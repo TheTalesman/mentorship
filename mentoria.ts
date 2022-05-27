@@ -23,7 +23,7 @@ type Taxavel = {
 };
 
 const taxes: any = {
-  cpf1: 0.05,
+  cpf1: (valor: number) => 0.05 * valor,
   cpf2: 0.07,
   cnpj1: 0.01,
   cnpj2: {
@@ -33,9 +33,11 @@ const taxes: any = {
 };
 
 // let resultadoEsperado = 9300;
-let resultadoEsperado = 4925; // isOn = true; cnpj2
-// let resultadoEsperado = 3850; // isOn = false; cnpj2
+//let resultadoEsperado = 4925; // isOn = true; cnpj2
+let resultadoEsperado = 3850; // isOn = false; cnpj2
 let valorInput = 5000;
+const isOn = false;
+const taxType = "cnpj2";
 // let valorInput = 5000;
 // let resultadoEsperado = 4750;
 let resultadoObtido;
@@ -49,10 +51,10 @@ if (resultadoObtido == resultadoEsperado) {
 function inputTela() {
   //ui logic
   const taxavalAtual: Taxavel = {
-    nome: "cnpj2",
+    nome: taxType,
   };
 
-  return { taxavalAtual, valor: valorInput, isOn: true };
+  return { taxavalAtual, valor: valorInput, isOn: isOn };
   //return { tipo: "cpf1", valor: 5000 };
 }
 
@@ -62,13 +64,18 @@ function outputTela(valor: number) {
   console.log("valor final:", valor);
 }
 
-function calculaImposto(valor: number, taxavel: Taxavel, isOn: bo) {
+function calculaImposto(valor: number, taxavel: Taxavel, isOn: boolean) {
   console.log(`tipo: ${taxavel.nome}`);
-  let tax = taxes[taxavel.nome];
-  if (taxavel.nome === "cnpj2") {
-    if (taxavel) tax = taxes[taxavel.nome];
-  }
+  let tax = getTax(taxavel.nome, isOn);
   return valor * tax;
+}
+
+function getTax(nome: string, isOn: boolean) {
+  return nome !== "cnpj2" ? taxes[nome] : getTaxCnpj2(isOn);
+}
+
+function getTaxCnpj2(isOn: boolean) {
+  return isOn ? taxes["cnpj2"].isOn : taxes["cnpj2"].isOff;
 }
 
 function calculaRetorno() {
