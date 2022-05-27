@@ -18,8 +18,8 @@
 // Princípio da inversão de dependência [4]
 //     "deve-se depender de abstrações, não de objetos concretos."
 
-let resultadoEsperado = 4750;
-
+//let resultadoEsperado = 4750;
+let resultadoEsperado = 3850;
 let resultadoObtido;
 main();
 if (resultadoObtido == resultadoEsperado) {
@@ -30,7 +30,7 @@ if (resultadoObtido == resultadoEsperado) {
 
 function inputTela() {
   //ui logic
-  return { tipo: "cpf1", valor: 5000 };
+  return { tipo: "cnpj2", valor: 5000, isOn: false };
 }
 
 function outputTela(valor: number) {
@@ -40,7 +40,7 @@ function outputTela(valor: number) {
 }
 
 function calculaRetorno() {
-  const { tipo, valor } = inputTela();
+  const { tipo, valor, isOn } = inputTela();
   let impostoaReceber = 0;
   console.log("calculando valor");
   console.log("tipo: ", tipo);
@@ -56,7 +56,14 @@ function calculaRetorno() {
     impostoaReceber = valor * 0.01;
     console.log("valor: 0.01");
   }
-  outputTela(valor - impostoaReceber);
+  if (tipo === "cnpj2") {
+    if (isOn) {
+      impostoaReceber = valor * 0.015;
+    } else {
+      impostoaReceber = valor * 0.23;
+    }
+  }
+  resultadoObtido = valor - impostoaReceber;
   return;
 }
 
