@@ -1,7 +1,7 @@
 //TODO
 // apply solid
 // add use case for cnpj 2 with a new flag isOn, when isOn is true tax should be 0.015, on isOn is false, tax should be 0.23
-// add use case for cpf3 and cnpj3 which should sum tax instead of reducing
+// add use case for cpf3 and cnpj3 which should sum tax instead of reducing cpf3 = 0.4 cnpj3 = 0.34
 // add some ingenous  use case
 // apply types?
 // apply hexagon?
@@ -19,8 +19,9 @@
 //     "deve-se depender de abstrações, não de objetos concretos."
 
 //let resultadoEsperado = 4750;
-let resultadoEsperado = 3850;
+let resultadoEsperado = 7000;
 let resultadoObtido;
+
 main();
 if (resultadoObtido == resultadoEsperado) {
   console.log("Resultado: deu boa");
@@ -30,7 +31,7 @@ if (resultadoObtido == resultadoEsperado) {
 
 function inputTela() {
   //ui logic
-  return { tipo: "cnpj2", valor: 5000, isOn: false };
+  return { tipo: "cpf3", valor: 5000, isOn: false };
 }
 
 function outputTela(valor: number) {
@@ -50,11 +51,17 @@ function calculaRetorno() {
   }
   if (tipo == "cpf2") {
     impostoaReceber = valor * 0.07;
-    console.log("valor: 0.7");
+    console.log("taxa: 0.7");
+  }
+  if (tipo == "cpf3") {
+    impostoaReceber = valor * 0.4;
+    console.log("taxa: 0.4");
+    resultadoObtido = valor + impostoaReceber;
+    return;
   }
   if (tipo === "cnpj") {
     impostoaReceber = valor * 0.01;
-    console.log("valor: 0.01");
+    console.log("taxa: 0.01");
   }
   if (tipo === "cnpj2") {
     if (isOn) {
@@ -63,6 +70,13 @@ function calculaRetorno() {
       impostoaReceber = valor * 0.23;
     }
   }
+  if (tipo === "cnpj3") {
+    impostoaReceber = valor * 0.34;
+    console.log("taxa: 0.34");
+    resultadoObtido = valor + impostoaReceber;
+    return;
+  }
+
   resultadoObtido = valor - impostoaReceber;
   return;
 }
