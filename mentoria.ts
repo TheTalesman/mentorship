@@ -1,7 +1,7 @@
 //TODO
 // apply solid
 // add use case for cnpj 2 with a new flag isOn, when isOn is true tax should be 0.015, on isOn is false, tax should be 0.23
-// add use case for cpf3 and cnpj3 which should sum tax instead of reducing
+// add use case for cpf3 and cnpj3 which should sum tax instead of reducing cpf 0.4 cnpj 0.34
 // add some ingenous  use case
 // apply types?
 // apply hexagon?
@@ -25,19 +25,21 @@ type Taxavel = {
 const taxes: any = {
   cpf1: (valor: number) => 0.05 * valor,
   cpf2: 0.07,
+  cpf3: 0.4,
   cnpj1: 0.01,
   cnpj2: {
     isOn: 0.015,
     isOff: 0.23,
   },
+  cnpj3: 0.34,
 };
 
 // let resultadoEsperado = 9300;
 //let resultadoEsperado = 4925; // isOn = true; cnpj2
-let resultadoEsperado = 3850; // isOn = false; cnpj2
+let resultadoEsperado = 7000; // isOn = false; cnpj2
 let valorInput = 5000;
 const isOn = false;
-const taxType = "cnpj2";
+const taxType = "cpf3";
 // let valorInput = 5000;
 // let resultadoEsperado = 4750;
 let resultadoObtido;
@@ -84,7 +86,9 @@ function calculaRetorno() {
   console.log("calculando valor");
   console.log("taxavel: ", taxavalAtual);
   impostoaReceber = calculaImposto(valor, taxavalAtual, isOn);
-  outputTela(valor - impostoaReceber);
+  ["cnpj3", "cpf3"].includes(taxavalAtual.nome)
+    ? outputTela(valor + impostoaReceber)
+    : outputTela(valor - impostoaReceber);
   return;
 }
 
