@@ -22,8 +22,28 @@ type Taxavel = {
   nome: string;
 };
 
-const taxes: any = {
-  cpf1: (valor: number) => 0.05 * valor,
+type TaxesMapAvailableTypes = number | ComplexTax;
+type TaxesMap = {
+  [key: string]: TaxesMapAvailableTypes;
+};
+
+const getNumberFromMap = (
+  taxType: TaxesMapAvailableTypes,
+  isOn?: boolean
+): number => {
+  if (isOn === undefined) {
+    return taxType as number;
+  }
+  return (taxType as ComplexTax)[`${isOn ? "isOn" : "isOff"}`];
+};
+
+type ComplexTax = {
+  isOn: number;
+  isOff: number;
+};
+
+const taxes: TaxesMap = {
+  cpf1: 0.05,
   cpf2: 0.07,
   cpf3: 0.4,
   cnpj1: 0.01,
@@ -68,16 +88,16 @@ function outputTela(valor: number) {
 
 function calculaImposto(valor: number, taxavel: Taxavel, isOn: boolean) {
   console.log(`tipo: ${taxavel.nome}`);
-  let tax = getTax(taxavel.nome, isOn);
+  let tax: number = getTax(taxavel.nome, isOn);
   return valor * tax;
 }
 
-function getTax(nome: string, isOn: boolean) {
-  return nome !== "cnpj2" ? taxes[nome] : getTaxCnpj2(isOn);
+function getTax(nome: string, isOn: boolean): number {
+  return nome !== "cnpj2" ? getNumberFromMap(taxes[nome]) : getTaxCnpj2(isOn);
 }
 
-function getTaxCnpj2(isOn: boolean) {
-  return isOn ? taxes["cnpj2"].isOn : taxes["cnpj2"].isOff;
+function getTaxCnpj2(isOn: boolean): number {
+  return getNumberFromMap(taxes["cnpj2"], isOn);
 }
 
 function calculaRetorno() {
