@@ -6,11 +6,17 @@
 // apply types?
 // apply hexagon?
 // apply ddd?
-var tax = { cpf1: 0.05, cpf2: 0.07, cnpj1: 0.01 };
-var resultadoEsperado = 9300;
-var valorInput = 10000;
-// let valorInput = 5000;
-// let resultadoEsperado = 4750;
+// Princípio de única responsabilidade[1]
+//     "uma classe deve ter apenas uma única responsabilidade (mudanças em apenas uma parte da especificação do software, devem ser capaz de afetar a especificação da classe)."
+// Princípio de aberto/fechado[2]
+//     "entidades de software devem ser abertas para extensão, mas fechadas para modificação."
+// Princípio da substituição de Liskov
+//     "objetos em um programa devem ser substituíveis por instâncias de seus subtipos, sem alterar a funcionalidade do programa." deve ser capaz de afetar apenas a especificação da classe
+// Princípio da segregação de Interface[3]
+//     "muitas interfaces de clientes específicas, são melhores do que uma para todos propósitos."
+// Princípio da inversão de dependência [4]
+//     "deve-se depender de abstrações, não de objetos concretos."
+var resultadoEsperado = 4750;
 var resultadoObtido;
 main();
 if (resultadoObtido == resultadoEsperado) {
@@ -21,27 +27,30 @@ else {
 }
 function inputTela() {
     //ui logic
-    var taxavalAtual = {
-        nome: "cpf2"
-    };
-    return { taxavalAtual: taxavalAtual, valor: valorInput };
-    //return { tipo: "cpf1", valor: 5000 };
+    return { tipo: "cpf1", valor: 5000 };
 }
 function outputTela(valor) {
     //ui logic
     resultadoObtido = valor;
     console.log("valor final:", valor);
 }
-function calculaImposto(valor, taxavel) {
-    console.log("tipo: " + taxavel.nome);
-    return valor * tax[taxavel.nome];
-}
 function calculaRetorno() {
-    var _a = inputTela(), taxavalAtual = _a.taxavalAtual, valor = _a.valor;
-    var impostoaReceber = 0;
+    var _a = inputTela(), tipo = _a.tipo, valor = _a.valor;
+    var impostoaReceber;
     console.log("calculando valor");
-    console.log("taxavel: ", taxavalAtual);
-    impostoaReceber = calculaImposto(valor, taxavalAtual);
+    console.log("tipo: ", tipo);
+    if (tipo === "cpf1") {
+        impostoaReceber = valor * 0.05;
+        console.log("taxa: 0.5");
+    }
+    if (tipo == "cpf2") {
+        impostoaReceber = valor * 0.07;
+        console.log("valor: 0.7");
+    }
+    if (tipo === "cnpj") {
+        impostoaReceber = valor * 0.01;
+        console.log("valor: 0.01");
+    }
     outputTela(valor - impostoaReceber);
     return;
 }

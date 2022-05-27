@@ -18,26 +18,8 @@
 // Princípio da inversão de dependência [4]
 //     "deve-se depender de abstrações, não de objetos concretos."
 
-type Taxavel = {
-  nome: string;
-};
+let resultadoEsperado = 4750;
 
-const taxes: any = {
-  cpf1: 0.05,
-  cpf2: 0.07,
-  cnpj1: 0.01,
-  cnpj2: {
-    isOn: 0.015,
-    isOff: 0.23,
-  },
-};
-
-// let resultadoEsperado = 9300;
-let resultadoEsperado = 4925; // isOn = true; cnpj2
-// let resultadoEsperado = 3850; // isOn = false; cnpj2
-let valorInput = 5000;
-// let valorInput = 5000;
-// let resultadoEsperado = 4750;
 let resultadoObtido;
 main();
 if (resultadoObtido == resultadoEsperado) {
@@ -48,12 +30,7 @@ if (resultadoObtido == resultadoEsperado) {
 
 function inputTela() {
   //ui logic
-  const taxavalAtual: Taxavel = {
-    nome: "cnpj2",
-  };
-
-  return { taxavalAtual, valor: valorInput, isOn: true };
-  //return { tipo: "cpf1", valor: 5000 };
+  return { tipo: "cpf1", valor: 5000 };
 }
 
 function outputTela(valor: number) {
@@ -62,21 +39,23 @@ function outputTela(valor: number) {
   console.log("valor final:", valor);
 }
 
-function calculaImposto(valor: number, taxavel: Taxavel, isOn: bo) {
-  console.log(`tipo: ${taxavel.nome}`);
-  let tax = taxes[taxavel.nome];
-  if (taxavel.nome === "cnpj2") {
-    if (taxavel) tax = taxes[taxavel.nome];
-  }
-  return valor * tax;
-}
-
 function calculaRetorno() {
-  const { taxavalAtual, valor, isOn } = inputTela();
+  const { tipo, valor } = inputTela();
   let impostoaReceber = 0;
   console.log("calculando valor");
-  console.log("taxavel: ", taxavalAtual);
-  impostoaReceber = calculaImposto(valor, taxavalAtual, isOn);
+  console.log("tipo: ", tipo);
+  if (tipo === "cpf1") {
+    impostoaReceber = valor * 0.05;
+    console.log("taxa: 0.5");
+  }
+  if (tipo == "cpf2") {
+    impostoaReceber = valor * 0.07;
+    console.log("valor: 0.7");
+  }
+  if (tipo === "cnpj") {
+    impostoaReceber = valor * 0.01;
+    console.log("valor: 0.01");
+  }
   outputTela(valor - impostoaReceber);
   return;
 }
